@@ -27,10 +27,10 @@ module.exports = {
                 link: "/zero/",
             },
             {
-                text: "go-zero",link: "github.com/shuguocloud/go-zero",
+                text: "go-zero",link: "https://github.com/shuguocloud/go-zero",
             },
             {
-                text: "CDS",link: "https://github.com/tal-tech/cds",
+                text: "CDS",link: "https://github.com/shuguocloud/cds",
             },
         ],
         docsDir: "docs",

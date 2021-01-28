@@ -4,16 +4,16 @@
 
 [English](readme-en.md) | 简体中文
 
-[![Go](github.com/shuguocloud/go-zero/workflows/Go/badge.svg?branch=master)](github.com/shuguocloud/go-zero/actions)
+[![Go](https://github.com/shuguocloud/go-zero/workflows/Go/badge.svg?branch=master)](https://github.com/shuguocloud/go-zero/actions)
 [![codecov](https://codecov.io/gh/tal-tech/go-zero/branch/master/graph/badge.svg)](https://codecov.io/gh/tal-tech/go-zero)
-[![Go Report Card](https://goreportcard.com/badge/github.com/tal-tech/go-zero)](https://goreportcard.com/report/github.com/tal-tech/go-zero)
-[![Release](https://img.shields.io/github/v/release/tal-tech/go-zero.svg?style=flat-square)](github.com/shuguocloud/go-zero)
+[![Go Report Card](https://goreportcard.com/badge/github.com/shuguocloud/go-zero)](https://goreportcard.com/report/github.com/shuguocloud/go-zero)
+[![Release](https://img.shields.io/github/v/release/tal-tech/go-zero.svg?style=flat-square)](https://github.com/shuguocloud/go-zero)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 1. 项目介绍
 
 * 项目官网：http://zero.gocn.vip
-* 项目地址：[github.com/shuguocloud/go-zero](github.com/shuguocloud/go-zero)
+* 项目地址：[https://github.com/shuguocloud/go-zero](https://github.com/shuguocloud/go-zero)
 
 ## 2. 项目文档
 

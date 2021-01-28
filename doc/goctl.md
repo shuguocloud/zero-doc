@@ -3,7 +3,7 @@
 ## goctl用途
 
 * 定义api请求
-* 根据定义的api自动生成golang(后端), java(iOS & Android), typescript(web & 晓程序)，dart(flutter)
+* 根据定义的api自动生成golang(后端), java(iOS & Android), typescript(web & 小程序)，dart(flutter)
 * 生成MySQL CURD+Cache
 * 生成MongoDB CURD+Cache
 
@@ -162,7 +162,7 @@ service user-api {
 
 #### goland/vscode插件
 
-开发者可以在 goland 或 vscode 中搜索 goctl 的 api 插件，它们提供了 api 语法高亮，语法检测和格式化相关功能，插件安装及使用相关资料请点击[这里](https://github.com/tal-tech/goctl-plugins)。
+开发者可以在 goland 或 vscode 中搜索 goctl 的 api 插件，它们提供了 api 语法高亮，语法检测和格式化相关功能，插件安装及使用相关资料请点击[这里](https://github.com/shuguocloud/goctl-plugins)。
 
 插件支持:
 

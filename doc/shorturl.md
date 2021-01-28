@@ -19,11 +19,11 @@
   3. 日志，用于数据收集和问题定位
   4. 可观测性，没有度量就没有优化
 
-对于其中每一点，我们都需要用很长的篇幅来讲述其原理和实现，那么对我们后端开发者来说，要想把这些知识点都掌握并落实到业务系统里，难度是非常大的，不过我们可以依赖已经被大流量验证过的框架体系。[go-zero 微服务框架](github.com/shuguocloud/go-zero)就是为此而生。
+对于其中每一点，我们都需要用很长的篇幅来讲述其原理和实现，那么对我们后端开发者来说，要想把这些知识点都掌握并落实到业务系统里，难度是非常大的，不过我们可以依赖已经被大流量验证过的框架体系。[go-zero 微服务框架](https://github.com/shuguocloud/go-zero)就是为此而生。
 
 另外，我们始终秉承 **工具大于约定和文档** 的理念。我们希望尽可能减少开发人员的心智负担，把精力都投入到产生业务价值的代码上，减少重复代码的编写，所以我们开发了 `goctl` 工具。
 
-下面我通过短链微服务来演示通过 [go-zero](github.com/shuguocloud/go-zero) 快速的创建微服务的流程，走完一遍，你就会发现：原来编写微服务如此简单！
+下面我通过短链微服务来演示通过 [go-zero](https://github.com/shuguocloud/go-zero) 快速的创建微服务的流程，走完一遍，你就会发现：原来编写微服务如此简单！
 
 ## 1. 什么是短链服务
 
@@ -65,11 +65,17 @@
   ```shell
   go get -u github.com/golang/protobuf/protoc-gen-go
   ```
+* 安装 `protoc`
+  ``` shell
+  wget https://github.com/protocolbuffers/protobuf/releases/download/v3.14.protoc-3.14.0-linux-x86_64.zip
+  unzip protoc-3.14.0-linux-x86_64.zip
+  mv bin/protoc /usr/local/bin/
+  ```
 
 * 安装 goctl 工具
 
   ```shell
-  GO111MODULE=on GOPROXY=https://goproxy.cn/,direct go get -u github.com/tal-tech/go-zero/tools/goctl
+  GO111MODULE=on GOPROXY=https://goproxy.cn/,direct go get -u github.com/shuguocloud/go-zero/tools/goctl
   ```
 
 * 创建工作目录 `shorturl` 和 `shorturl/api`
@@ -86,7 +92,7 @@
   require (
     github.com/golang/mock v1.4.3
     github.com/golang/protobuf v1.4.2
-    github.com/tal-tech/go-zero v1.0.16
+    github.com/shuguocloud/go-zero v1.1.4
     golang.org/x/net v0.0.0-20200707034311-ab3426394381
     google.golang.org/grpc v1.29.1
   )
@@ -292,7 +298,12 @@
   $ go run transform.go -f etc/transform.yaml
   Starting rpc server at 127.0.0.1:8080...
   ```
-
+  查看服务是否注册
+  ```
+  $ETCDCTL_API=3 etcdctl get transform.rpc --prefix
+  transform.rpc/7587851893787585061
+  127.0.0.1:8080
+  ``` 
   `etc/transform.yaml` 文件里可以修改侦听端口等配置
 
 ## 7. 修改 API Gateway 代码调用 transform rpc 服务
@@ -339,19 +350,19 @@
 * 修改 `internal/logic/expandlogic.go` 里的 `Expand` 方法，如下：
 
   ```go
-  func (l *ExpandLogic) Expand(req types.ExpandReq) (*types.ExpandResp, error) {
+  func (l *ExpandLogic) Expand(req types.ExpandReq) (types.ExpandResp, error) {
     // 手动代码开始
-    resp, err := l.svcCtx.Transformer.Expand(l.ctx, &transformer.ExpandReq{
-      Shorten: req.Shorten,
-    })
-    if err != nil {
-      return nil, err
-    }
-  
-    return &types.ExpandResp{
-      Url: resp.Url,
-    }, nil
-    // 手动代码结束
+	resp, err := l.svcCtx.Transformer.Expand(l.ctx, &transformer.ExpandReq{
+		Shorten: req.Shorten,
+	})
+	if err != nil {
+		return types.ExpandResp{}, err
+	}
+
+	return types.ExpandResp{
+		Url: resp.Url,
+	}, nil
+	// 手动代码结束
   }
   ```
 
@@ -360,21 +371,22 @@
 * 修改 `internal/logic/shortenlogic.go`，如下：
 
   ```go
-  func (l *ShortenLogic) Shorten(req types.ShortenReq) (*types.ShortenResp, error) {
+  func (l *ShortenLogic) Shorten(req types.ShortenReq) (types.ShortenResp, error) {
     // 手动代码开始
-    resp, err := l.svcCtx.Transformer.Shorten(l.ctx, &transformer.ShortenReq{
-      Url: req.Url,
-    })
-    if err != nil {
-      return nil, err
-    }
-  
-    return &types.ShortenResp{
-      Shorten: resp.Shorten,
-    }, nil
-    // 手动代码结束
+	resp, err := l.svcCtx.Transformer.Shorten(l.ctx, &transformer.ShortenReq{
+		Url: req.Url,
+	})
+	if err != nil {
+		return types.ShortenResp{}, err
+	}
+
+	return types.ShortenResp{
+		Shorten: resp.Shorten,
+	}, nil
+	// 手动代码结束
   }
   ```
+有的版本生成返回值可能是指针类型，需要自己调整下
 
 通过调用 `transformer` 的 `Shorten` 方法实现 url 到短链的变换
 
@@ -427,7 +439,7 @@
 * 修改 `rpc/transform/etc/transform.yaml`，增加如下内容：
 
   ```yaml
-  DataSource: root:@tcp(localhost:3306)/gozero
+  DataSource: root:password@tcp(localhost:3306)/gozero
   Table: shorturl
   Cache:
     - Host: localhost:6379
@@ -453,7 +465,7 @@
   ```go
   type ServiceContext struct {
     c     config.Config
-    Model *model.ShorturlModel   // 手动代码
+    Model model.ShorturlModel   // 手动代码
   }
   
   func NewServiceContext(c config.Config) *ServiceContext {
@@ -505,13 +517,13 @@
   至此代码修改完成，凡是手动修改的代码我加了标注
 
   **注意：**
-  1. undefined cache，你需要 `import "github.com/tal-tech/go-zero/core/stores/cache"`
+  1. undefined cache，你需要 `import "github.com/shuguocloud/go-zero/core/stores/cache"`
   2. undefined model, sqlx, hash 等，你需要在文件中
   
   ```golang
   import "shorturl/rpc/transform/model"
 
-  import "github.com/tal-tech/go-zero/core/stores/sqlx"
+  import "github.com/shuguocloud/go-zero/core/stores/sqlx"
   ```
 
 ## 10. 完整调用演示
@@ -560,7 +572,7 @@
 
 ## 12. 完整代码
 
-[github.com/shuguocloud/go-zero/tree/master/example/shorturl](github.com/shuguocloud/go-zero/tree/master/example/shorturl)
+[https://github.com/shuguocloud/go-zero/tree/master/example/shorturl](https://github.com/shuguocloud/go-zero/tree/master/example/shorturl)
 
 ## 12. 总结
 

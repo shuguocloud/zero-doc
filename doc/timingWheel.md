@@ -277,13 +277,13 @@ func (tw *TimingWheel) getPositionAndCircle(d time.Duration) (pos int, circle in
 
 > 同时在 `go-zero` 中还有很多实用的组件工具，用好工具对于提升服务性能和开发效率都有很大的帮助，希望本篇文章能给大家带来一些收获。
 
-同时欢迎大家使用 `go-zero` 并加入我们，[项目地址](github.com/shuguocloud/go-zero)
+同时欢迎大家使用 `go-zero` 并加入我们，[项目地址](https://github.com/shuguocloud/go-zero)
 
 <img src="https://gitee.com/kevwan/static/raw/master/doc/images/wechat.jpg" alt="wechat" width="300" />
 
 
 ## 参考资料
 
-- [go-zero](github.com/shuguocloud/go-zero)
+- [go-zero](https://github.com/shuguocloud/go-zero)
 - [go-zero 文档](https://www.yuque.com/tal-tech/go-zero)
 - [go-zero中 collection.Cache](https://github.com/shuguocloud/zero-doc/blob/main/doc/collection.md)
